@@ -1,0 +1,371 @@
+{
+  "meta": {
+    "title": "杜金达 · 转正述职报告",
+    "version": "1.0.0",
+    "lastUpdated": "2026-09-09",
+    "description": "客服部售前+售后客服转正述职报告数据"
+  },
+  "profile": {
+    "name": "杜金达",
+    "department": "客服部",
+    "position": "售前+售后客服",
+    "startDate": "2026-09-02",
+    "probationMonths": 3
+  },
+  "stores": [
+    {
+      "id": "dr-loriya",
+      "name": "DR.LORIYA家庭清洁京东自营旗舰店",
+      "shortName": "DR.LORIYA",
+      "category": "家庭清洁",
+      "status": "active",
+      "joinDate": "2026-09-02"
+    },
+    {
+      "id": "dago",
+      "name": "DAGO京东自营旗舰店",
+      "shortName": "DAGO",
+      "category": "美妆",
+      "status": "active",
+      "joinDate": "2026-09-06"
+    },
+    {
+      "id": "kazhixing",
+      "name": "卡智星玩具乐器京东自营旗舰店",
+      "shortName": "卡智星",
+      "category": "玩具乐器",
+      "status": "active",
+      "joinDate": "2026-09-09"
+    },
+    {
+      "id": "dago-beauty",
+      "name": "DAGO美妆京东自营旗舰店",
+      "shortName": "DAGO美妆",
+      "category": "美妆",
+      "status": "active",
+      "joinDate": "2026-09-09"
+    }
+  ],
+  "dailyData": [
+    {
+      "date": "2026-09-03",
+      "dayOfWeek": "三",
+      "isWorkday": true,
+      "stores": ["dr-loriya"],
+      "metrics": {
+        "totalInquiries": 12,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 5.18,
+        "reviews": 0,
+        "satisfaction": 0.00,
+        "conversionAmount": 46.60,
+        "conversionOrders": 3,
+        "preSaleInquiries": null,
+        "postSaleInquiries": null
+      },
+      "specialCases": [
+        {
+          "type": "资质审查",
+          "description": "客户要求出示营业执照/检测报告",
+          "resolution": "依保密协议婉拒，安抚劝慰，成功解决",
+          "result": "避免矛盾升级，未流向售后团队"
+        }
+      ],
+      "notes": "正式入职前数据（9月2日入职），入职第二天"
+    },
+    {
+      "date": "2026-09-04",
+      "dayOfWeek": "四",
+      "isWorkday": true,
+      "stores": ["dr-loriya"],
+      "metrics": {
+        "totalInquiries": 32,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 6.67,
+        "reviews": 1,
+        "satisfaction": 100.00,
+        "conversionAmount": 58.60,
+        "conversionOrders": 4,
+        "preSaleInquiries": 10,
+        "postSaleInquiries": 20
+      },
+      "specialCases": [
+        {
+          "type": "投诉处理",
+          "description": "投诉宣传不符（马桶清洁球，宣称400次，实际2-3天用完）",
+          "resolution": "安抚沟通，部分优惠补偿",
+          "result": "客户接受，避免平台介入"
+        },
+        {
+          "type": "产品咨询",
+          "description": "咨询烟雾灭杀虫剂、清洁喷剂使用方法",
+          "resolution": "详细解答使用方法",
+          "result": "客户满意"
+        }
+      ],
+      "notes": "正式第一天上号；咨询类型：售前10人，售后20人；未付款25人"
+    },
+    {
+      "date": "2026-09-05",
+      "dayOfWeek": "五",
+      "isWorkday": false,
+      "stores": [],
+      "metrics": null,
+      "specialCases": [],
+      "notes": "休息日"
+    },
+    {
+      "date": "2026-09-06",
+      "dayOfWeek": "六",
+      "isWorkday": true,
+      "stores": ["dago", "dr-loriya"],
+      "metrics": {
+        "totalInquiries": 80,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 6.25,
+        "reviews": 2,
+        "satisfaction": 100.00,
+        "conversionAmount": 250.60,
+        "conversionOrders": 12,
+        "preSaleInquiries": null,
+        "postSaleInquiries": null
+      },
+      "storeBreakdown": [
+        {
+          "storeId": "dago",
+          "inquiries": 32,
+          "conversionAmount": 74.30,
+          "conversionOrders": 4,
+          "satisfaction": 100.00
+        },
+        {
+          "storeId": "dr-loriya",
+          "inquiries": 48,
+          "conversionAmount": 176.30,
+          "conversionOrders": 8,
+          "satisfaction": 100.00
+        }
+      ],
+      "specialCases": [],
+      "notes": "首次同时接待2家店铺"
+    },
+    {
+      "date": "2026-09-07",
+      "dayOfWeek": "日",
+      "isWorkday": true,
+      "stores": ["dago", "dr-loriya"],
+      "metrics": {
+        "totalInquiries": 128,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 6.35,
+        "reviews": 9,
+        "satisfaction": 94.45,
+        "conversionAmount": 667.34,
+        "conversionOrders": 32,
+        "preSaleInquiries": null,
+        "postSaleInquiries": null
+      },
+      "storeBreakdown": [
+        {
+          "storeId": "dago",
+          "inquiries": 76,
+          "conversionAmount": 450.80,
+          "conversionOrders": 20,
+          "satisfaction": 88.89,
+          "negativeReviews": 1
+        },
+        {
+          "storeId": "dr-loriya",
+          "inquiries": 52,
+          "conversionAmount": 216.54,
+          "conversionOrders": 10,
+          "satisfaction": 100.00
+        }
+      ],
+      "specialCases": [
+        {
+          "type": "差评",
+          "description": "DAGO店铺出现1个差评",
+          "resolution": "持续跟进",
+          "result": "满意度88.89%"
+        }
+      ],
+      "notes": "DAGO店铺出现差评，满意度88.89%"
+    },
+    {
+      "date": "2026-09-08",
+      "dayOfWeek": "一",
+      "isWorkday": true,
+      "stores": ["dago", "dr-loriya"],
+      "metrics": {
+        "totalInquiries": 96,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 7.32,
+        "reviews": 8,
+        "satisfaction": 100.00,
+        "conversionAmount": 524.80,
+        "conversionOrders": 14,
+        "preSaleInquiries": null,
+        "postSaleInquiries": null
+      },
+      "storeBreakdown": [
+        {
+          "storeId": "dago",
+          "inquiries": 60,
+          "conversionAmount": 282.60,
+          "conversionOrders": 9,
+          "satisfaction": 92.00,
+          "note": "满意度按用户指定92%记录"
+        },
+        {
+          "storeId": "dr-loriya",
+          "inquiries": 36,
+          "conversionAmount": 242.20,
+          "conversionOrders": 6,
+          "satisfaction": 100.00
+        }
+      ],
+      "specialCases": [],
+      "notes": "DAGO店铺满意度按用户指定92%记录"
+    },
+    {
+      "date": "2026-09-09",
+      "dayOfWeek": "二",
+      "isWorkday": true,
+      "stores": ["dr-loriya", "dago", "kazhixing", "dago-beauty"],
+      "metrics": {
+        "totalInquiries": 128,
+        "responseRate30s": 100.00,
+        "avgResponseTime": 6.87,
+        "reviews": 6,
+        "satisfaction": 100.00,
+        "conversionAmount": 639.80,
+        "conversionOrders": 24,
+        "preSaleInquiries": null,
+        "postSaleInquiries": null
+      },
+      "storeBreakdown": [
+        {
+          "storeId": "dr-loriya",
+          "inquiries": 44,
+          "conversionAmount": 222.00,
+          "conversionOrders": 9,
+          "satisfaction": 100.00,
+          "negativeReviews": 0,
+          "reviewRate": 4.55,
+          "pendingPayment": 2,
+          "notConverted": 28
+        },
+        {
+          "storeId": "dago",
+          "inquiries": 70,
+          "conversionAmount": 343.10,
+          "conversionOrders": 12,
+          "satisfaction": 100.00,
+          "negativeReviews": 0,
+          "reviewRate": 1.43,
+          "pendingPayment": 1,
+          "notConverted": 51
+        },
+        {
+          "storeId": "kazhixing",
+          "inquiries": 10,
+          "conversionAmount": 74.70,
+          "conversionOrders": 3,
+          "satisfaction": 100.00,
+          "negativeReviews": 0,
+          "reviewRate": 10.00,
+          "pendingPayment": 0,
+          "notConverted": 6
+        },
+        {
+          "storeId": "dago-beauty",
+          "inquiries": 4,
+          "conversionAmount": 0.00,
+          "conversionOrders": 0,
+          "satisfaction": 100.00,
+          "negativeReviews": 0,
+          "reviewRate": 25.00,
+          "pendingPayment": 0,
+          "notConverted": 4
+        }
+      ],
+      "specialCases": [],
+      "notes": "首次同时接待4家店铺（DR.LORIYA、DAGO、卡智星、DAGO美妆）"
+    }
+  ],
+  "monthlySummary": {
+    "totalInquiries": 476,
+    "avgResponseRate30s": 100.00,
+    "avgResponseTime": 6.66,
+    "totalReviews": 25,
+    "avgSatisfaction": 99.58,
+    "totalConversionAmount": 2187.74,
+    "totalConversionOrders": 89,
+    "workingDays": 7,
+    "avgDailyInquiries": 68,
+    "avgDailyConversionAmount": 312.53,
+    "storesServed": 4
+  },
+  "skills": {
+    "communication": 85,
+    "productKnowledge": 80,
+    "platformOperation": 90,
+    "problemSolving": 88,
+    "teamCollaboration": 82
+  },
+  "highlights": [
+    {
+      "title": "快速上手",
+      "value": "2天",
+      "description": "从入职到独立接待仅用2天"
+    },
+    {
+      "title": "应答率",
+      "value": "100%",
+      "description": "30秒应答率持续保持100%"
+    },
+    {
+      "title": "累计接待",
+      "value": "476人",
+      "description": "累计接待客户咨询476人次"
+    },
+    {
+      "title": "促成金额",
+      "value": "¥2,187.74",
+      "description": "累计促成下单金额"
+    }
+  ],
+  "timeline": [
+    {
+      "date": "2026-09-02",
+      "event": "入职",
+      "description": "正式入职客服部"
+    },
+    {
+      "date": "2026-09-03",
+      "event": "首次接待",
+      "description": "入职第二天，开始接待客户咨询"
+    },
+    {
+      "date": "2026-09-04",
+      "event": "正式上号",
+      "description": "独立处理售前售后咨询"
+    },
+    {
+      "date": "2026-09-06",
+      "event": "多店铺接待",
+      "description": "开始同时接待DAGO和DR.LORIYA两家店铺"
+    },
+    {
+      "date": "2026-09-07",
+      "event": "业绩高峰",
+      "description": "单日接待128人，促成金额¥667.34"
+    },
+    {
+      "date": "2026-09-09",
+      "event": "四店齐开",
+      "description": "同时接待4家店铺（DR.LORIYA、DAGO、卡智星、DAGO美妆），单日接待128人，促成¥639.80"
+    }
+  ]
+}
