@@ -6,6 +6,7 @@
   <title>杜金达 · 转正述职报告</title>
   <link rel="stylesheet" href="style.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 </head>
@@ -18,8 +19,9 @@
     <div class="nav-brand">杜金达</div>
     <div class="nav-links">
       <a href="#hero" class="nav-link active">概览</a>
-      <a href="#highlights" class="nav-link">亮点</a>
-      <a href="#daily" class="nav-link">每日数据</a>
+      <a href="#data-dashboard" class="nav-link">数据中心</a>
+      <a href="#charts" class="nav-link">图表分析</a>
+      <a href="#store-compare" class="nav-link">店铺对比</a>
       <a href="#skills" class="nav-link">能力</a>
       <a href="#timeline" class="nav-link">成长</a>
     </div>
@@ -43,25 +45,76 @@
     </div>
   </section>
 
-  <!-- 关键数字 -->
-  <section id="highlights" class="section highlights-section">
+  <!-- 数据中心（日/周/月切换） -->
+  <section id="data-dashboard" class="section dashboard-section">
     <div class="section-header">
-      <h2 class="section-title">工作亮点</h2>
-      <p class="section-subtitle">入职以来的关键数据</p>
+      <h2 class="section-title">数据中心</h2>
+      <p class="section-subtitle">多维度数据查看与分析</p>
     </div>
-    <div class="highlights-grid" id="highlights-grid"></div>
+
+    <!-- 时间维度切换 -->
+    <div class="time-toggle" id="time-toggle">
+      <button class="toggle-btn active" data-period="day">日</button>
+      <button class="toggle-btn" data-period="week">周</button>
+      <button class="toggle-btn" data-period="month">月</button>
+    </div>
+
+    <!-- 日期选择器 -->
+    <div class="date-selector" id="date-selector"></div>
+
+    <!-- 数据概览卡片 -->
+    <div class="dashboard-cards" id="dashboard-cards"></div>
+
+    <!-- 自动分析 -->
+    <div class="analysis-panel" id="analysis-panel"></div>
   </section>
 
-  <!-- 每日数据 -->
-  <section id="daily" class="section daily-section">
+  <!-- 图表分析 -->
+  <section id="charts" class="section charts-section">
     <div class="section-header">
-      <h2 class="section-title">每日数据</h2>
-      <p class="section-subtitle">按日期查看详细数据</p>
+      <h2 class="section-title">趋势分析</h2>
+      <p class="section-subtitle">数据可视化与趋势洞察</p>
     </div>
-    <div class="daily-cards" id="daily-cards"></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>接待量趋势</h3>
+        <canvas id="chart-inquiries"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>促成金额趋势</h3>
+        <canvas id="chart-amount"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>满意度变化</h3>
+        <canvas id="chart-satisfaction"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>响应时长变化</h3>
+        <canvas id="chart-response"></canvas>
+      </div>
+    </div>
   </section>
 
-  <!-- 技能雷达图 -->
+  <!-- 店铺对比 -->
+  <section id="store-compare" class="section compare-section">
+    <div class="section-header">
+      <h2 class="section-title">店铺对比</h2>
+      <p class="section-subtitle">各店铺绩效横向对比</p>
+    </div>
+    <div class="compare-table-wrapper" id="compare-table-wrapper"></div>
+    <div class="charts-grid">
+      <div class="chart-card">
+        <h3>各店铺接待量占比</h3>
+        <canvas id="chart-store-inquiries"></canvas>
+      </div>
+      <div class="chart-card">
+        <h3>各店铺促成金额占比</h3>
+        <canvas id="chart-store-amount"></canvas>
+      </div>
+    </div>
+  </section>
+
+  <!-- 能力评估 -->
   <section id="skills" class="section skills-section">
     <div class="section-header">
       <h2 class="section-title">能力评估</h2>
