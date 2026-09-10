@@ -21,6 +21,87 @@
   --gradient-3: linear-gradient(135deg, #10b981 0%, #06b6d4 100%);
 }
 
+/* 大屏投影模式 */
+body.projection-mode {
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+  --text-muted: rgba(255, 255, 255, 0.6);
+  --glass-bg: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.15);
+}
+
+body.projection-mode .hero-title {
+  font-size: 5rem;
+}
+
+body.projection-mode .hero-subtitle {
+  font-size: 1.8rem;
+}
+
+body.projection-mode .section-title {
+  font-size: 3rem;
+}
+
+body.projection-mode .section-subtitle {
+  font-size: 1.4rem;
+}
+
+body.projection-mode .dash-card-value {
+  font-size: 3.5rem;
+}
+
+body.projection-mode .dash-card-label {
+  font-size: 1.1rem;
+}
+
+body.projection-mode .analysis-card h3 {
+  font-size: 1.3rem;
+}
+
+body.projection-mode .analysis-item {
+  padding: 1rem 0;
+}
+
+body.projection-mode .analysis-item-label,
+body.projection-mode .analysis-item-value {
+  font-size: 1.1rem;
+}
+
+body.projection-mode .compare-table th,
+body.projection-mode .compare-table td {
+  padding: 1.2rem 2rem;
+  font-size: 1.1rem;
+}
+
+body.projection-mode .chart-card h3 {
+  font-size: 1.2rem;
+}
+
+body.projection-mode .hero-stat {
+  padding: 2rem 3rem;
+  min-width: 200px;
+}
+
+body.projection-mode .hero-stat-value {
+  font-size: 2.5rem;
+}
+
+body.projection-mode .hero-stat-label {
+  font-size: 1rem;
+}
+
+body.projection-mode .highlight-value {
+  font-size: 4rem;
+}
+
+body.projection-mode .highlight-title {
+  font-size: 1.3rem;
+}
+
+body.projection-mode .highlight-desc {
+  font-size: 1.1rem;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -115,9 +196,37 @@ body {
   width: 100%;
 }
 
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
 .nav-date {
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+.projection-btn {
+  padding: 0.5rem 1rem;
+  background: var(--glass-bg);
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.projection-btn:hover {
+  border-color: var(--accent);
+  color: var(--text-primary);
+}
+
+.projection-btn.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
 }
 
 /* ========================================
