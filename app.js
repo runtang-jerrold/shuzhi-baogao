@@ -432,10 +432,23 @@ function renderCharts() {
   const chartOptions = {
     responsive: true,
     maintainAspectRatio: false,
-    plugins: { legend: { labels: { color: 'rgba(255,255,255,0.7)' } } },
+    animation: { duration: 800 },
+    resizeDelay: 200,
+    devicePixelRatio: 1,
+    plugins: {
+      legend: {
+        labels: { color: '#cbd5e1', font: { size: 13 } }
+      }
+    },
     scales: {
-      x: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } },
-      y: { ticks: { color: 'rgba(255,255,255,0.5)' }, grid: { color: 'rgba(255,255,255,0.05)' } }
+      x: {
+        ticks: { color: '#94a3b8', font: { size: 12 } },
+        grid: { color: 'rgba(148, 163, 184, 0.1)' }
+      },
+      y: {
+        ticks: { color: '#94a3b8', font: { size: 12 } },
+        grid: { color: 'rgba(148, 163, 184, 0.1)' }
+      }
     }
   };
 
@@ -448,9 +461,9 @@ function renderCharts() {
       datasets: [{
         label: '接待量',
         data: data.map(d => d.metrics.totalInquiries),
-        backgroundColor: 'rgba(99, 102, 241, 0.6)',
-        borderColor: 'rgba(99, 102, 241, 1)',
-        borderWidth: 1
+        backgroundColor: 'rgba(129, 140, 248, 0.7)',
+        borderColor: 'rgba(129, 140, 248, 1)',
+        borderWidth: 2
       }]
     },
     options: chartOptions
@@ -465,9 +478,9 @@ function renderCharts() {
       datasets: [{
         label: '促成金额 (¥)',
         data: data.map(d => d.metrics.conversionAmount),
-        borderColor: 'rgba(16, 185, 129, 1)',
-        backgroundColor: 'rgba(16, 185, 129, 0.1)',
-        fill: true, tension: 0.4
+        borderColor: 'rgba(52, 211, 153, 1)',
+        backgroundColor: 'rgba(52, 211, 153, 0.15)',
+        fill: true, tension: 0.4, borderWidth: 3
       }]
     },
     options: chartOptions
@@ -482,9 +495,9 @@ function renderCharts() {
       datasets: [{
         label: '满意度 (%)',
         data: data.map(d => d.metrics.satisfaction),
-        borderColor: 'rgba(245, 158, 11, 1)',
-        backgroundColor: 'rgba(245, 158, 11, 0.1)',
-        fill: true, tension: 0.4
+        borderColor: 'rgba(251, 191, 36, 1)',
+        backgroundColor: 'rgba(251, 191, 36, 0.15)',
+        fill: true, tension: 0.4, borderWidth: 3
       }]
     },
     options: { ...chartOptions, scales: { ...chartOptions.scales, y: { ...chartOptions.scales.y, min: 80, max: 105 } } }
@@ -499,9 +512,9 @@ function renderCharts() {
       datasets: [{
         label: '响应时长 (s)',
         data: data.map(d => d.metrics.avgResponseTime),
-        borderColor: 'rgba(239, 68, 68, 1)',
-        backgroundColor: 'rgba(239, 68, 68, 0.1)',
-        fill: true, tension: 0.4
+        borderColor: 'rgba(248, 113, 113, 1)',
+        backgroundColor: 'rgba(248, 113, 113, 0.15)',
+        fill: true, tension: 0.4, borderWidth: 3
       }]
     },
     options: chartOptions
@@ -604,7 +617,21 @@ function renderStoreCharts() {
 
   const activeStores = reportData.stores.filter(s => s.status === 'active');
   const labels = activeStores.map(s => s.shortName);
-  const colors = ['#6366f1', '#10b981', '#f59e0b', '#ef4444', '#8b5cf6'];
+  const colors = ['#818cf8', '#34d399', '#fbbf24', '#f87171', '#a78bfa'];
+
+  const doughnutOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    animation: { duration: 800 },
+    resizeDelay: 200,
+    devicePixelRatio: 1,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { color: '#cbd5e1', font: { size: 13 }, padding: 20 }
+      }
+    }
+  };
 
   // 接待量占比
   destroyChart('chart-store-inquiries');
@@ -615,14 +642,11 @@ function renderStoreCharts() {
       datasets: [{
         data: activeStores.map(s => storeTotals[s.id]?.inquiries || 0),
         backgroundColor: colors.slice(0, activeStores.length),
-        borderWidth: 0
+        borderWidth: 2,
+        borderColor: '#1e293b'
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.7)' } } }
-    }
+    options: doughnutOptions
   });
 
   // 促成金额占比
@@ -634,14 +658,11 @@ function renderStoreCharts() {
       datasets: [{
         data: activeStores.map(s => storeTotals[s.id]?.amount || 0),
         backgroundColor: colors.slice(0, activeStores.length),
-        borderWidth: 0
+        borderWidth: 2,
+        borderColor: '#1e293b'
       }]
     },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: { legend: { position: 'bottom', labels: { color: 'rgba(255,255,255,0.7)' } } }
-    }
+    options: doughnutOptions
   });
 }
 
