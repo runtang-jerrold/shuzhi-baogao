@@ -14,6 +14,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   initBackground();
   initNavigation();
   initTimeToggle();
+  initProjectionMode();
   renderHero();
   renderDashboard();
   renderCharts();
@@ -754,6 +755,30 @@ function initAnimations() {
     gsap.from('.hero-subtitle', { opacity: 0, y: 30, duration: 0.8, delay: 0.6 });
     gsap.from('.hero-stats', { opacity: 0, y: 30, duration: 0.8, delay: 0.8 });
   }
+}
+
+// ========================================
+// 大屏投影模式
+// ========================================
+
+function initProjectionMode() {
+  const btn = document.getElementById('projection-btn');
+  if (!btn) return;
+
+  // 检查URL参数或本地存储
+  const isProjection = new URLSearchParams(window.location.search).get('projection') === 'true'
+    || localStorage.getItem('projectionMode') === 'true';
+
+  if (isProjection) {
+    document.body.classList.add('projection-mode');
+    btn.classList.add('active');
+  }
+
+  btn.addEventListener('click', () => {
+    document.body.classList.toggle('projection-mode');
+    btn.classList.toggle('active');
+    localStorage.setItem('projectionMode', document.body.classList.contains('projection-mode'));
+  });
 }
 
 // ========================================
