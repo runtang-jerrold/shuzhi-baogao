@@ -852,6 +852,11 @@ body {
   background-clip: text;
 }
 
+.dash-card-unit {
+  font-size: 1.1rem;
+  margin-left: 0.15rem;
+}
+
 .dash-card-label {
   font-size: 0.9rem;
   color: var(--text-secondary);
