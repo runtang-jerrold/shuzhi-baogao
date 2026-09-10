@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>杜金达 · 转正述职报告</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+</head>
+<body>
+  <!-- 3D粒子背景 -->
+  <canvas id="bg-canvas"></canvas>
+
+  <!-- 毛玻璃导航栏 -->
+  <nav class="glass-nav">
+    <div class="nav-brand">杜金达</div>
+    <div class="nav-links">
+      <a href="#hero" class="nav-link active">概览</a>
+      <a href="#highlights" class="nav-link">亮点</a>
+      <a href="#daily" class="nav-link">每日数据</a>
+      <a href="#skills" class="nav-link">能力</a>
+      <a href="#timeline" class="nav-link">成长</a>
+    </div>
+    <div class="nav-date" id="nav-date"></div>
+  </nav>
+
+  <!-- 英雄区 -->
+  <section id="hero" class="section hero-section">
+    <div class="hero-content">
+      <div class="hero-badge">客服部 · 售前+售后</div>
+      <h1 class="hero-title">
+        <span class="title-line">杜金达</span>
+        <span class="title-line accent">转正述职报告</span>
+      </h1>
+      <p class="hero-subtitle">入职 <span id="days-count">0</span> 天 · 接待 <span id="total-inquiries">0</span> 人 · 促成 <span id="total-amount">¥0</span></p>
+      <div class="hero-stats" id="hero-stats"></div>
+    </div>
+    <div class="scroll-hint">
+      <span>向下滚动</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- 关键数字 -->
+  <section id="highlights" class="section highlights-section">
+    <div class="section-header">
+      <h2 class="section-title">工作亮点</h2>
+      <p class="section-subtitle">入职以来的关键数据</p>
+    </div>
+    <div class="highlights-grid" id="highlights-grid"></div>
+  </section>
+
+  <!-- 每日数据 -->
+  <section id="daily" class="section daily-section">
+    <div class="section-header">
+      <h2 class="section-title">每日数据</h2>
+      <p class="section-subtitle">按日期查看详细数据</p>
+    </div>
+    <div class="daily-cards" id="daily-cards"></div>
+  </section>
+
+  <!-- 技能雷达图 -->
+  <section id="skills" class="section skills-section">
+    <div class="section-header">
+      <h2 class="section-title">能力评估</h2>
+      <p class="section-subtitle">客服核心技能掌握程度</p>
+    </div>
+    <div class="skills-container">
+      <div class="skills-radar" id="skills-radar"></div>
+      <div class="skills-list" id="skills-list"></div>
+    </div>
+  </section>
+
+  <!-- 成长时间轴 -->
+  <section id="timeline" class="section timeline-section">
+    <div class="section-header">
+      <h2 class="section-title">成长轨迹</h2>
+      <p class="section-subtitle">入职以来的重要节点</p>
+    </div>
+    <div class="timeline" id="timeline"></div>
+  </section>
+
+  <!-- 页脚 -->
+  <footer class="glass-footer">
+    <p>© 2026 杜金达 | 基于数据驱动的智能客服解决方案</p>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
