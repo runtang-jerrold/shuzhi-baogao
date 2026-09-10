@@ -179,46 +179,90 @@ function calculateSummary(days) {
   const totalInquiries = days.reduce((sum, d) => sum + (d.metrics?.totalInquiries || 0), 0);
   const totalAmount = days.reduce((sum, d) => sum + (d.metrics?.conversionAmount || 0), 0);
   const totalOrders = days.reduce((sum, d) => sum + (d.metrics?.conversionOrders || 0), 0);
-  const totalReviews = days.reduce((sum, d) => sum + (d.metrics?.reviews || 0), 0);
+  const totalItems = days.reduce((sum, d) => sum + (d.metrics?.conversionItems || 0), 0);
+  const totalNotConverted = days.reduce((sum, d) => sum + (d.metrics?.notConverted || 0), 0);
+  const totalPendingPayment = days.reduce((sum, d) => sum + (d.metrics?.pendingPayment || 0), 0);
+
+  // 评价数：优先用 reviews，否则由评价率 × 接待量推算
+  const totalReviews = days.reduce((sum, d) => {
+    if (typeof d.metrics?.reviews === 'number') return sum + d.metrics.reviews;
+    const rate = d.metrics?.reviewRate || 0;
+    return sum + Math.round(rate / 100 * (d.metrics?.totalInquiries || 0));
+  }, 0);
 
   const satisfactionDays = days.filter(d => d.metrics?.satisfaction > 0);
   const avgSatisfaction = satisfactionDays.length
     ? satisfactionDays.reduce((sum, d) => sum + d.metrics.satisfaction, 0) / satisfactionDays.length
     : 0;
 
-  const avgResponseTime = days.length
-    ? days.reduce((sum, d) => sum + (d.metrics?.avgResponseTime || 0), 0) / days.length
-    : 0;
+  // 响应时长：按接待量加权
+  const weightedResponse = days.reduce((sum, d) => sum + (d.metrics?.avgResponseTime || 0) * (d.metrics?.totalInquiries || 0), 0);
+  const avgResponseTime = totalInquiries > 0 ? weightedResponse / totalInquiries : 0;
+
+  // 30S应答率：按接待量加权
+  const weightedRate30s = days.reduce((sum, d) => sum + (d.metrics?.responseRate30s || 0) * (d.metrics?.totalInquiries || 0), 0);
+  const avgResponseRate30s = totalInquiries > 0 ? weightedRate30s / totalInquiries : 0;
+
+  // 差评率：按接待量加权
+  const weightedNeg = days.reduce((sum, d) => sum + (d.metrics?.negativeReviewRate || 0) * (d.metrics?.totalInquiries || 0), 0);
+  const avgNegativeReviewRate = totalInquiries > 0 ? weightedNeg / totalInquiries : 0;
 
   return {
     totalInquiries,
     totalConversionAmount: totalAmount,
     totalConversionOrders: totalOrders,
+    totalConversionItems: totalItems,
+    totalNotConverted,
+    totalPendingPayment,
     totalReviews,
     avgSatisfaction: avgSatisfaction.toFixed(2),
     avgResponseTime: avgResponseTime.toFixed(2),
+    avgResponseRate30s: avgResponseRate30s.toFixed(2),
+    avgNegativeReviewRate: avgNegativeReviewRate.toFixed(2),
     workingDays: days.length,
     avgDailyInquiries: (totalInquiries / days.length).toFixed(0),
     avgDailyConversionAmount: (totalAmount / days.length).toFixed(2)
   };
 }
 
-function getPreviousSummary(period) {
+function getPreviousSummary(period, dateStr) {
   const data = reportData.dailyData.filter(d => d.isWorkday && d.metrics);
+
+  if (period === 'day' && dateStr) {
+    const idx = data.findIndex(d => d.date === dateStr);
+    if (idx > 0) return calculateSummary([data[idx - 1]]);
+    return null;
+  }
 
   if (period === 'week') {
     const prev = data.slice(-14, -7);
-    return calculateSummary(prev);
+    return prev.length ? calculateSummary(prev) : null;
   }
 
   if (period === 'month') {
-    // 上月数据（这里简化为前半段 vs 后半段）
     const mid = Math.floor(data.length / 2);
     const prev = data.slice(0, mid);
-    return calculateSummary(prev);
+    return prev.length ? calculateSummary(prev) : null;
   }
 
   return null;
+}
+
+// 计算环比变化百分比
+function calcChange(current, previous) {
+  if (previous === null || previous === undefined || previous === 0) return null;
+  return ((current - previous) / Math.abs(previous) * 100);
+}
+
+// 生成环比标签HTML
+function changeHtml(change, invert = false) {
+  if (change === null) return '<div class="dash-card-change neutral">暂无对比</div>';
+  const isUp = change >= 0;
+  // invert=true 表示下降是好事（如响应时长）
+  const isGood = invert ? !isUp : isUp;
+  const cls = Math.abs(change) < 0.05 ? 'neutral' : (isGood ? 'positive' : 'negative');
+  const arrow = Math.abs(change) < 0.05 ? '' : (isUp ? '↑' : '↓');
+  return `<div class="dash-card-change ${cls}">${arrow} ${Math.abs(change).toFixed(1)}% 环比</div>`;
 }
 
 // ========================================
@@ -322,36 +366,32 @@ function renderDashboardCards() {
   if (!container) return;
 
   const summary = getSummary(currentPeriod, currentDate);
-  const prev = getPreviousSummary(currentPeriod);
+  const prev = getPreviousSummary(currentPeriod, currentDate);
 
   if (!summary) {
     container.innerHTML = '<div class="dash-card"><div class="dash-card-label">暂无数据</div></div>';
     return;
   }
 
+  const p = prev || {};
   const cards = [
-    { label: '接待量', value: summary.totalInquiries, suffix: '人' },
-    { label: '促成金额', value: '¥' + Number(summary.totalConversionAmount).toLocaleString(), suffix: '' },
-    { label: '促成订单', value: summary.totalConversionOrders, suffix: '单' },
-    { label: '满意度', value: summary.avgSatisfaction + '%', suffix: '' },
-    { label: '平均响应', value: summary.avgResponseTime + 's', suffix: '' },
-    { label: '日均接待', value: summary.avgDailyInquiries, suffix: '人/天' }
+    { label: '接待量', value: summary.totalInquiries, unit: '人', change: calcChange(summary.totalInquiries, p.totalInquiries) },
+    { label: '促成金额', value: '¥' + Number(summary.totalConversionAmount).toLocaleString(), unit: '', change: calcChange(summary.totalConversionAmount, p.totalConversionAmount) },
+    { label: '促成订单', value: summary.totalConversionOrders, unit: '单', change: calcChange(summary.totalConversionOrders, p.totalConversionOrders) },
+    { label: '促成商品数', value: summary.totalConversionItems, unit: '件', change: calcChange(summary.totalConversionItems, p.totalConversionItems) },
+    { label: '满意度', value: summary.avgSatisfaction, unit: '%', change: calcChange(Number(summary.avgSatisfaction), Number(p.avgSatisfaction)) },
+    { label: '30S应答率', value: summary.avgResponseRate30s, unit: '%', change: calcChange(Number(summary.avgResponseRate30s), Number(p.avgResponseRate30s)) },
+    { label: '平均响应', value: summary.avgResponseTime, unit: 's', change: calcChange(Number(summary.avgResponseTime), Number(p.avgResponseTime)), invert: true },
+    { label: '咨询差评率', value: summary.avgNegativeReviewRate, unit: '%', change: calcChange(Number(summary.avgNegativeReviewRate), Number(p.avgNegativeReviewRate)), invert: true }
   ];
 
-  container.innerHTML = cards.map(card => {
-    let changeHtml = '';
-    if (prev) {
-      // 简单对比逻辑
-      changeHtml = '<div class="dash-card-change neutral">--</div>';
-    }
-    return `
-      <div class="dash-card">
-        <div class="dash-card-value">${card.value}</div>
-        <div class="dash-card-label">${card.label}</div>
-        ${changeHtml}
-      </div>
-    `;
-  }).join('');
+  container.innerHTML = cards.map(card => `
+    <div class="dash-card">
+      <div class="dash-card-value">${card.value}<span class="dash-card-unit">${card.unit || ''}</span></div>
+      <div class="dash-card-label">${card.label}</div>
+      ${changeHtml(card.change, card.invert)}
+    </div>
+  `).join('');
 }
 
 function renderAnalysis() {
@@ -379,6 +419,11 @@ function renderAnalysis() {
   // 店铺数量
   const activeStores = reportData.stores.filter(s => s.status === 'active').length;
 
+  // 未下单率
+  const notConverted = summary.totalNotConverted || 0;
+  const notConvertedRate = summary.totalInquiries > 0
+    ? ((notConverted / summary.totalInquiries) * 100).toFixed(1) : 0;
+
   container.innerHTML = `
     <div class="analysis-card">
       <h3>转化分析</h3>
@@ -391,16 +436,47 @@ function renderAnalysis() {
         <span class="analysis-item-value">¥${avgOrderValue}</span>
       </div>
       <div class="analysis-item">
+        <span class="analysis-item-label">促成商品数</span>
+        <span class="analysis-item-value">${summary.totalConversionItems || 0}件</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-item-label">咨询未下单</span>
+        <span class="analysis-item-value">${notConverted}人（${notConvertedRate}%）</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-item-label">下单待付款</span>
+        <span class="analysis-item-value">${summary.totalPendingPayment || 0}人</span>
+      </div>
+    </div>
+    <div class="analysis-card">
+      <h3>服务分析</h3>
+      <div class="analysis-item">
+        <span class="analysis-item-label">平均满意度</span>
+        <span class="analysis-item-value">${summary.avgSatisfaction}%</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-item-label">30S应答率</span>
+        <span class="analysis-item-value">${summary.avgResponseRate30s}%</span>
+      </div>
+      <div class="analysis-item">
+        <span class="analysis-item-label">咨询差评率</span>
+        <span class="analysis-item-value">${summary.avgNegativeReviewRate}%</span>
+      </div>
+      <div class="analysis-item">
         <span class="analysis-item-label">评价率</span>
         <span class="analysis-item-value">${reviewRate}%</span>
       </div>
       <div class="analysis-item">
-        <span class="analysis-item-label">服务店铺数</span>
-        <span class="analysis-item-value">${activeStores}家</span>
+        <span class="analysis-item-label">总评价数</span>
+        <span class="analysis-item-value">${summary.totalReviews}条</span>
       </div>
     </div>
     <div class="analysis-card">
       <h3>效率分析</h3>
+      <div class="analysis-item">
+        <span class="analysis-item-label">平均响应时长</span>
+        <span class="analysis-item-value">${summary.avgResponseTime}s</span>
+      </div>
       <div class="analysis-item">
         <span class="analysis-item-label">工作天数</span>
         <span class="analysis-item-value">${summary.workingDays}天</span>
@@ -414,8 +490,8 @@ function renderAnalysis() {
         <span class="analysis-item-value">¥${summary.avgDailyConversionAmount}</span>
       </div>
       <div class="analysis-item">
-        <span class="analysis-item-label">总评价数</span>
-        <span class="analysis-item-value">${summary.totalReviews}条</span>
+        <span class="analysis-item-label">服务店铺数</span>
+        <span class="analysis-item-value">${activeStores}家</span>
       </div>
     </div>
   `;
@@ -547,19 +623,26 @@ function renderCompareTable() {
       totalInquiries: 0,
       totalAmount: 0,
       totalOrders: 0,
+      totalItems: 0,
       days: 0,
-      satisfactionSum: 0
+      satisfactionSum: 0,
+      responseSum: 0,
+      negRateSum: 0
     };
   });
 
   data.forEach(day => {
     day.storeBreakdown.forEach(sb => {
       if (storeStats[sb.storeId]) {
-        storeStats[sb.storeId].totalInquiries += sb.inquiries || 0;
-        storeStats[sb.storeId].totalAmount += sb.conversionAmount || 0;
-        storeStats[sb.storeId].totalOrders += sb.conversionOrders || 0;
-        storeStats[sb.storeId].days++;
-        storeStats[sb.storeId].satisfactionSum += sb.satisfaction || 0;
+        const s = storeStats[sb.storeId];
+        s.totalInquiries += sb.inquiries || 0;
+        s.totalAmount += sb.conversionAmount || 0;
+        s.totalOrders += sb.conversionOrders || 0;
+        s.totalItems += sb.conversionItems || 0;
+        s.days++;
+        s.satisfactionSum += sb.satisfaction || 0;
+        s.responseSum += sb.avgResponseTime || 0;
+        s.negRateSum += sb.negativeReviewRate || 0;
       }
     });
   });
@@ -567,11 +650,14 @@ function renderCompareTable() {
   const rows = Object.values(storeStats).map(s => ({
     ...s,
     avgSatisfaction: s.days > 0 ? (s.satisfactionSum / s.days).toFixed(1) : 0,
+    avgResponse: s.days > 0 ? (s.responseSum / s.days).toFixed(2) : 0,
+    avgNegRate: s.days > 0 ? (s.negRateSum / s.days).toFixed(2) : 0,
     conversionRate: s.totalInquiries > 0 ? ((s.totalOrders / s.totalInquiries) * 100).toFixed(1) : 0
   }));
 
   const maxInquiries = Math.max(...rows.map(r => r.totalInquiries));
   const maxAmount = Math.max(...rows.map(r => r.totalAmount));
+  const minResponse = Math.min(...rows.filter(r => Number(r.avgResponse) > 0).map(r => Number(r.avgResponse)));
 
   container.innerHTML = `
     <table class="compare-table">
@@ -581,9 +667,11 @@ function renderCompareTable() {
           <th>接待量</th>
           <th>促成金额</th>
           <th>订单数</th>
+          <th>商品数</th>
           <th>转化率</th>
           <th>满意度</th>
-          <th>工作天数</th>
+          <th>平均响应</th>
+          <th>差评率</th>
         </tr>
       </thead>
       <tbody>
@@ -593,9 +681,11 @@ function renderCompareTable() {
             <td class="${r.totalInquiries === maxInquiries ? 'best-value' : ''}">${r.totalInquiries}</td>
             <td class="${r.totalAmount === maxAmount ? 'best-value' : ''}">¥${r.totalAmount.toLocaleString()}</td>
             <td>${r.totalOrders}</td>
+            <td>${r.totalItems}</td>
             <td>${r.conversionRate}%</td>
             <td>${r.avgSatisfaction}%</td>
-            <td>${r.days}</td>
+            <td class="${Number(r.avgResponse) === minResponse ? 'best-value' : ''}">${r.avgResponse}s</td>
+            <td>${r.avgNegRate}%</td>
           </tr>
         `).join('')}
       </tbody>
